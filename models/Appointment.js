@@ -1,16 +1,43 @@
-const express = require('express');
-const router = express.Router();
-const { verifyToken } = require('../middleware/authMiddleware');  // Importe ton middleware
+const mongoose = require("mongoose");
 
-// Exemple de route protégée pour récupérer les rendez-vous
-router.get('/appointments', verifyToken, async (req, res) => {
-  try {
-    // Simule une récupération des rendez-vous
-    const appointments = await Appointment.find();
-    res.json(appointments);
-  } catch (err) {
-    res.status(500).json({ message: 'Error retrieving appointments' });
-  }
-});
+const appointmentSchema = new mongoose.Schema({
+    name: { 
+        type: String, 
+        required: true 
+    },
+    email: { 
+        type: String, 
+        required: true 
+    },
+    phone: { 
+        type: String, 
+        required: true 
+    },
+    department: { 
+        type: String, 
+        required: true 
+    },
+    doctor: { 
+        type: String, 
+        required: true 
+    },
+    date: { 
+        type: Date, 
+        required: true 
+    },
+    message: { 
+        type: String, 
+        required: true 
+    },
+    status: { 
+        type: String, 
+        enum: ["scheduled", "completed", "canceled"], 
+        default: "scheduled" 
+    },
+    created_at: {
+        type: Date,
+        default: Date.now
+    }
+}, { timestamps: true });
 
-module.exports = router;
+module.exports = mongoose.model("Appointment", appointmentSchema);

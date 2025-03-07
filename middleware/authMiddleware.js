@@ -1,16 +1,21 @@
+require('dotenv').config();
+
 const jwt = require('jsonwebtoken');
-const secret = process.env.JWT_SECRET || 'secret_key';  // Vérifie que tu utilises le même secret ici
+const secret = process.env.JWT_SECRET;
 
+if (!secret) {
+  throw new Error('JWT_SECRET is not defined in environment variables');
+}
 
+// Middleware pour vérifier le token JWT
 const verifyToken = (req, res, next) => {
-  // Vérifie si le token est présent dans l'en-tête Authorization
-  const token = req.header('Authorization')?.split(' ')[1]; // "Bearer <token>"
-
-  console.log('Authorization Header:', req.header('Authorization'));  // Vérifie l'en-tête (à supprimer en production)
-
-  if (!token) {
+  // Récupère le token de l'en-tête Authorization
+  const authHeader = req.header('Authorization');
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ message: 'No token, authorization denied' });
   }
+
+  const token = authHeader.split(' ')[1]; // "Bearer <token>"
 
   try {
     // Vérifie le token
@@ -18,9 +23,23 @@ const verifyToken = (req, res, next) => {
     req.user = decoded; // Ajoute les données du token à la requête
     next(); // Passe à la prochaine étape du middleware
   } catch (err) {
-    console.error('Token verification error:', err);  // Log l'erreur pour débogage
-    return res.status(401).json({ message: 'Token is not valid' });
+    // Gère les erreurs spécifiques de JWT
+    let message = 'Token is not valid';
+    if (err.name === 'TokenExpiredError') {
+      message = 'Token has expired';
+    } else if (err.name === 'JsonWebTokenError') {
+      message = 'Invalid token';
+    }
+    return res.status(401).json({ message });
   }
 };
 
-module.exports = { verifyToken };
+// Middleware pour vérifier les rôles
+const checkRole = (role) => (req, res, next) => {
+  if (req.user.role !== role) {
+    return res.status(403).json({ message: `Access denied. Requires ${role} role` });
+  }
+  next();
+};
+
+module.exports = { verifyToken, checkRole };
