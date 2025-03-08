@@ -53,13 +53,18 @@ const getUserAppointments = async (req, res) => {
         }
 
         let query = {};
-        if (role === "client") query.client = userId;
-        if (role === "professional") query.professional = userId;
+        if (role === "client") query.client = userId; // Fetch appointments for the logged-in client
+        if (role === "professional") query.professional = userId; // Fetch appointments for the logged-in professional
 
-        const appointments = await Appointment.find(query).populate("client professional", "name email");
-        res.json(appointments);
+        // Populate client and professional details
+        const appointments = await Appointment.find(query)
+            .populate("client", "name email") // Populate client details
+            .populate("professional", "name email"); // Populate professional details
+
+        res.status(200).json({ appointments });
     } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la récupération des rendez-vous", error: error.message });
+        console.error("Erreur lors de la récupération des rendez-vous:", error);
+        res.status(500).json({ message: "Erreur serveur", error: error.message });
     }
 };
 

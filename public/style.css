@@ -4246,7 +4246,20 @@ body{
         padding: 12px;
     }
 }
+/* Style for the Logout Button */
+.btn-logout {
+    background-color: #ff0000; /* Red background */
+    color: #fff; /* White text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
+.btn-logout:hover {
+    background-color: #cc0000; /* Darker red on hover */
+}
 /*=========================
 	End Footer CSS
 ===========================*/

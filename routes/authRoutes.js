@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const Appointment = require("../models/Appointment"); 
 const { verifyToken, checkRole } = require("../middleware/authMiddleware");  
-const { createAppointment } = require("../controllers/appointmentController");  // <-- Import createAppointment here
+const { getUserAppointments } = require("../controllers/appointmentController");  // <-- Import createAppointment here
 
 const router = express.Router();
 const secret = process.env.JWT_SECRET;
@@ -75,6 +75,8 @@ router.get("/me", verifyToken, async (req, res) => {
         res.status(500).json({ message: "Server error" });
     }
 });
+router.get('/user', verifyToken, getUserAppointments);
+
 router.post('/appointments', verifyToken, checkRole('client'), async (req, res) => {
     const { name, email, phone, department, doctor, date, message } = req.body;
   

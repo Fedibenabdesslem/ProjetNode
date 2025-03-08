@@ -15,7 +15,8 @@ const router = express.Router();
 router.post('/', verifyToken, checkRole('client'), createAppointment);
 
 // Route to get appointments of the logged-in user (Accessible to clients & professionals)
-router.get('/', verifyToken, getUserAppointments);
+router.get('/user', verifyToken, getUserAppointments);
+
 
 // Route to get all appointments (Accessible only to admins)
 router.get('/all', verifyToken, checkRole('admin'), getAllAppointments);
