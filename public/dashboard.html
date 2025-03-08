@@ -181,13 +181,38 @@
     <!-- End Breadcrumbs -->
 
     <!-- Start Dashboard -->
-    <section class="dashboard section">
-        <div class="container">
-            <h2>Welcome, <span id="userName">User</span>!</h2>
-            <p>Email: <span id="userEmail">example@example.com</span></p>
-            <button id="logoutBtn">Logout</button>
+  
+            <section class="dashboard section">
+                <div class="container">
+                    <h2>Welcome, <span id="userName">User</span>!</h2>
+                    <p>Email: <span id="userEmail">example@example.com</span></p>
+            
+                    <!-- Table to display appointments -->
+                    <h3>Your Appointments</h3>
+                    <table id="appointmentsTable">
+                        <thead>
+                          <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Department</th>
+                            <th>Doctor</th>
+                            <th>Date</th>
+                            <th>Message</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- Les données des rendez-vous seront insérées ici -->
+                        </tbody>
+                      </table>
+                      
+            
+                    <button id="logoutBtn">Logout</button>
+                </div>
+            </section>
+
         </div>
-    </section>
+    
     <!-- End Dashboard -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
