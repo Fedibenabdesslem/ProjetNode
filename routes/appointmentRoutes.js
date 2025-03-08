@@ -1,3 +1,4 @@
+// File: routes/appointmentRoutes.js
 const express = require('express');
 const {
     createAppointment,
@@ -10,19 +11,19 @@ const { verifyToken, checkRole } = require('../middleware/authMiddleware');
 
 const router = express.Router();
 
-// Route pour créer un rendez-vous (accessible uniquement aux clients)
+// Route to create an appointment (Accessible only to clients)
 router.post('/', verifyToken, checkRole('client'), createAppointment);
 
-// Route pour récupérer les rendez-vous de l'utilisateur connecté (client ou professionnel)
+// Route to get appointments of the logged-in user (Accessible to clients & professionals)
 router.get('/', verifyToken, getUserAppointments);
 
-// Route pour récupérer tous les rendez-vous (accessible uniquement aux administrateurs)
+// Route to get all appointments (Accessible only to admins)
 router.get('/all', verifyToken, checkRole('admin'), getAllAppointments);
 
-// Route pour mettre à jour un rendez-vous (accessible au client ou au professionnel concerné)
+// Route to update an appointment (Accessible to the concerned client or professional)
 router.put('/:id', verifyToken, updateAppointment);
 
-// Route pour supprimer un rendez-vous (accessible au client ou au professionnel concerné)
+// Route to delete an appointment (Accessible to the concerned client or professional)
 router.delete('/:id', verifyToken, deleteAppointment);
 
 module.exports = router;

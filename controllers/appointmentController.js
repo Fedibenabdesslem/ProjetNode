@@ -1,33 +1,30 @@
 const Appointment = require("../models/Appointment");
+// Create a new appointment
 const createAppointment = async (req, res) => {
-    try {
-        const { name, email, phone, department, doctor, date, message } = req.body;
-        
-        // Check if the date is valid
-        const appointmentDate = new Date(date);
-        if (isNaN(appointmentDate.getTime())) {
-            return res.status(400).json({ message: 'Invalid date format' });
-        }
+    const { name, email, phone, department, doctor, date, message } = req.body;
 
-        // Create new appointment
-        const appointment = new Appointment({
+    try {
+        const newAppointment = new Appointment({
             name,
             email,
             phone,
             department,
             doctor,
-            date: appointmentDate,
+            date,
             message,
-            status: 'scheduled'
+            status: "scheduled", // Default status
+            created_at: Date.now()
         });
 
-        await appointment.save();
-        res.status(201).json({ message: 'Appointment created successfully', appointment });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ message: 'Error creating appointment', error: err.message });
+        await newAppointment.save();
+
+        res.status(201).json({ message: "Appointment created successfully", appointment: newAppointment });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
 };
+
 
 // 📌 Récupérer tous les rendez-vous (Admin)
 const getAllAppointments = async (req, res) => {

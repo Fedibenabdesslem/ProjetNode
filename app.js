@@ -1,8 +1,10 @@
+// File: app.js
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const app = express();
 const connectDB = require("./config/db");
-const authRoutes = require("./routes/authRoutes");  // Add this line
+const authRoutes = require("./routes/authRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
 
 // Database connection
@@ -16,10 +18,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Use the authentication routes
-app.use("/api/auth", authRoutes); // Ensure this line is added for '/api/auth/register' to work
+app.use("/api/auth", authRoutes);
 
-// Use the appointment routes (if any)
-app.use('/appointments', appointmentRoutes);
+// Use the appointment routes at /api/appointments
+app.use('/api/appointments', appointmentRoutes); // Ensure this line is correct
 
 // Serve index.html when accessing the root route
 app.get('/', (req, res) => {

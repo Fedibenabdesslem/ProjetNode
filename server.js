@@ -10,13 +10,14 @@ dotenv.config();  // Charge les variables d'environnement
 connectDB();  // ✅ Connexion à la base de données via db.js
 
 const app = express();
-
+const cors = require('cors');
+app.use(cors()); // Allow all origins for now, adjust for security later
 // Middleware
 app.use(cors());
 app.use(express.json());  // Permet de parser les requêtes JSON
 
 // Définition des routes
-app.use('/api/appointments', appointmentRoutes);
+app.use('/appointments', appointmentRoutes);
 app.use('/api/auth', authRoutes);
 
 // Gestion des erreurs 404

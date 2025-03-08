@@ -181,60 +181,9 @@
         </div>
     </div>
 </section>
+<script src="register.js"></script>
 <!--/ End Register -->
 
-<script>
-    // Handle form submission
-    document.getElementById("registerForm").addEventListener("submit", async function(e) {
-        e.preventDefault(); // Prevent default form submission
-
-        const name = document.getElementById("name").value;
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-
-        const data = {
-            name: name,
-            email: email,
-            password: password
-        };
-
-        // Optional client-side validation
-        if (!name || !email || !password) {
-            document.getElementById("error-message").innerText = "All fields are required!";
-            return;
-        }
-
-        // Validating email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            document.getElementById("error-message").innerText = "Invalid email address!";
-            return;
-        }
-
-        // Sending data to the server via POST request
-        try {
-            const response = await fetch("/api/auth/register", { // Use relative path
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            const result = await response.json();
-
-            if (response.status === 201) {
-                alert("User registered successfully! Token: " + result.token);
-                window.location.href = "/login"; // Redirect to login page or dashboard
-            } else {
-                document.getElementById("error-message").innerText = result.message;
-            }
-        } catch (error) {
-            console.error("Error:", error);
-            document.getElementById("error-message").innerText = "An error occurred during registration.";
-        }
-    });
-</script>
 
 	
 		<!-- Footer Area -->

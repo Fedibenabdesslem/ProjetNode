@@ -4167,6 +4167,86 @@ body{
 	display:inline-block;
 	margin-left:4px;
 }
+
+
+
+/* Dashboard Section Styling */
+.dashboard.section {
+    padding: 50px 0;
+    background-color: #f4f7fc;
+    font-family: Arial, sans-serif;
+}
+
+/* Container inside the dashboard */
+.dashboard .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Heading Style */
+.dashboard h2 {
+    font-size: 32px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Welcome Text Style */
+.dashboard p {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* User name and email span style */
+.dashboard span {
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Button Styling for Logout */
+#logoutBtn {
+    background-color: #ff6f61;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+#logoutBtn:hover {
+    background-color: #ff4e44;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design for smaller devices */
+@media (max-width: 768px) {
+    .dashboard .container {
+        padding: 20px;
+    }
+
+    .dashboard h2 {
+        font-size: 28px;
+    }
+
+    .dashboard p {
+        font-size: 16px;
+    }
+
+    #logoutBtn {
+        width: 100%;
+        padding: 12px;
+    }
+}
+
 /*=========================
 	End Footer CSS
 ===========================*/
