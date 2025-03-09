@@ -15,9 +15,14 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         const result = await response.json();
 
         if (response.ok) {
-            localStorage.setItem("token", result.token); // Ensure the token is saved
+            localStorage.setItem("token", result.token); // Sauvegarde le token
+
+            // Cache les boutons "Login" et "Register"
+            document.getElementById("loginBtn").style.display = "none";
+            document.getElementById("registerBtn").style.display = "none";
+
             alert("Login successful! Redirecting...");
-            window.location.href = "dashboard.html"; // Redirect after login
+            window.location.href = "dashboard.html"; // Redirection après connexion
         } else {
             errorMessage.innerText = result.message;
         }
