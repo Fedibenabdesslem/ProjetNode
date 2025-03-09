@@ -11,6 +11,6 @@ const appointmentSchema = new mongoose.Schema({
     status: { type: String, enum: ["scheduled", "completed", "canceled"], default: "scheduled" },
     client: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the User model
     created_at: { type: Date, default: Date.now }
-}, { timestamps: true });
+}, { timestamps: true, strictPopulate: false });
 
 module.exports = mongoose.model("Appointment", appointmentSchema);

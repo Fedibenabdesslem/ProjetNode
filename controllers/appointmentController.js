@@ -1,4 +1,5 @@
 const Appointment = require("../models/Appointment");
+const sendEmail = require('../utils/emailService'); 
 
 
 
@@ -31,6 +32,22 @@ const createAppointment = async (req, res) => {
         await newAppointment.save();
         console.log("Appointment saved:", newAppointment);  // Debug log to check if appointment was saved
 
+        // Send email confirmation to the client
+        const emailSubject = "Confirmation de Rendez-vous";
+        const emailText = `
+            Bonjour ${name},
+
+            Votre rendez-vous a été confirmé avec ${doctor} dans le département ${department}.
+            Date du rendez-vous: ${newAppointment.date.toLocaleString()}.
+            Message: ${message}
+
+            Merci de votre confiance !
+        `;
+
+        // Send the confirmation email using the sendEmail function
+        await sendEmail(email, emailSubject, emailText);
+
+        // Respond with success message
         res.status(201).json({ message: "Appointment created successfully", appointment: newAppointment });
     } catch (error) {
         console.error("Error creating appointment:", error);  // Debug log for errors
