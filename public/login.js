@@ -4,8 +4,6 @@ document.getElementById("loginForm").addEventListener("submit", async function (
     const email = document.querySelector("input[name='email']").value;
     const password = document.querySelector("input[name='password']").value;
     const errorMessage = document.getElementById("error-message");
-    const loginRegisterBtns = document.querySelector(".get-quote"); // Conteneur des boutons Login & Register
-    const logoutBtn = document.getElementById("logoutBtn");
 
     try {
         const response = await fetch("/api/auth/login", {
@@ -17,14 +15,9 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         const result = await response.json();
 
         if (response.ok) {
-            localStorage.setItem("token", result.token); // Sauvegarde du token
+            localStorage.setItem("token", result.token); // Ensure the token is saved
             alert("Login successful! Redirecting...");
-
-            // Mettre à jour l'affichage des boutons
-            if (loginRegisterBtns) loginRegisterBtns.style.display = "none"; // Cacher Login & Register
-            if (logoutBtn) logoutBtn.style.display = "block"; // Afficher Logout
-
-            window.location.href = "dashboard.html"; // Redirection après connexion
+            window.location.href = "dashboard.html"; // Redirect after login
         } else {
             errorMessage.innerText = result.message;
         }
