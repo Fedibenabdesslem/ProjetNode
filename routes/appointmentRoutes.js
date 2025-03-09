@@ -12,13 +12,13 @@ const { verifyToken, checkRole } = require('../middleware/authMiddleware');
 const router = express.Router();
 
 // Route to create an appointment (Accessible only to clients)
-router.post('/', verifyToken, checkRole('client'), createAppointment);
+router.post('/', verifyToken, createAppointment);
 
 // Route to get appointments of the logged-in user (Accessible to clients & professionals)
 router.get('/user', verifyToken, getUserAppointments);
 
 // Route to get all appointments (Accessible only to admins)
-router.get('/all', verifyToken, checkRole('admin'), getAllAppointments);
+router.get('/all', verifyToken, getAllAppointments);
 
 // Route to update an appointment (Accessible to the concerned client or professional)
 router.put('/:id', verifyToken, updateAppointment);
