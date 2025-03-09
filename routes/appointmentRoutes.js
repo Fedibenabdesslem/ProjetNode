@@ -1,30 +1,23 @@
-// File: routes/appointmentRoutes.js
+// routes/appointmentRoutes.js
 const express = require('express');
-const {
-    createAppointment,
-    getAllAppointments,
-    getUserAppointments,
-    updateAppointment,
-    deleteAppointment
-} = require('../controllers/appointmentController');
-const { verifyToken, checkRole } = require('../middleware/authMiddleware');
-
 const router = express.Router();
+const User = require('../models/User')
+const appointmentController = require('../controllers/appointmentController');
+const { verifyToken, checkRole } = require('../middleware/authMiddleware'); // Corrected import path
 
-// Route to create an appointment (Accessible only to clients)
-router.post('/', verifyToken, checkRole('client'), createAppointment);
+// Route to create an appointment (Client only)
+router.post('/', verifyToken, appointmentController.createAppointment);
 
-// Route to get appointments of the logged-in user (Accessible to clients & professionals)
-router.get('/user', verifyToken, getUserAppointments);
+// Route to get all appointments (Admin only)
+router.get('/', verifyToken, checkRole('admin'), appointmentController.getAllAppointments);
 
+// Route to get user-specific appointments (Client only)
+router.get('/user', verifyToken, appointmentController.getUserAppointments);
 
-// Route to get all appointments (Accessible only to admins)
-router.get('/all', verifyToken, checkRole('admin'), getAllAppointments);
+// Route to update an appointment (Client only)
+router.put('/:appointmentId', verifyToken, appointmentController.updateAppointment);
 
-// Route to update an appointment (Accessible to the concerned client or professional)
-router.put('/:id', verifyToken, updateAppointment);
-
-// Route to delete an appointment (Accessible to the concerned client or professional)
-router.delete('/:id', verifyToken, deleteAppointment);
+// Route to delete an appointment (Client only)
+router.delete('/:appointmentId', verifyToken, appointmentController.deleteAppointment);
 
 module.exports = router;

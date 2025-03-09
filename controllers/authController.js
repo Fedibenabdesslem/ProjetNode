@@ -2,82 +2,92 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
-// Fonction pour enregistrer un nouvel utilisateur
+// Register a new user
 const register = async (req, res) => {
-    const { name, email, password } = req.body;
+    const { name, email, password, role } = req.body;
 
-    // Validation des champs
     if (!name || !email || !password) {
-        return res.status(400).json({ message: "Veuillez fournir tous les champs requis : nom, email et mot de passe" });
+        return res.status(400).json({ message: "All fields (name, email, password) are required" });
     }
 
-    // Validation de l'email avec une expression régulière
+    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-        return res.status(400).json({ message: "Email invalide" });
+        return res.status(400).json({ message: "Invalid email format" });
     }
 
-    // Validation du mot de passe (ex: longueur minimale de 6 caractères)
+    // Password validation (Minimum 8 characters)
     if (password.length < 8) {
-        return res.status(400).json({ message: "Le mot de passe doit contenir au moins 6 caractères" });
+        return res.status(400).json({ message: "Password must be at least 8 characters" });
     }
 
     try {
-        // Vérifie si l'utilisateur existe déjà
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: "Un utilisateur avec cet email existe déjà" });
+            return res.status(400).json({ message: "Email already in use" });
         }
 
-        // Hash le mot de passe
         const hashedPassword = await bcrypt.hash(password, 10);
-
-        // Crée un nouvel utilisateur
-        const user = new User({ name, email, password: hashedPassword });
+        const user = new User({ name, email, password: hashedPassword, role: role || "client" });
         await user.save();
 
-        // Génère un token JWT avec une expiration
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        // Renvoie la réponse sans le mot de passe hashé
-        res.status(201).json({ message: "Utilisateur enregistré avec succès", token });
+        res.status(201).json({
+            message: "User registered successfully",
+            token,
+            user: { id: user._id, name: user.name, email: user.email, role: user.role }
+        });
     } catch (error) {
-        console.error("Erreur lors de l'enregistrement :", error);
-        res.status(500).json({ message: "Erreur interne du serveur" });
+        console.error("Error during registration:", error);
+        res.status(500).json({ message: "Server error" });
     }
 };
 
-// Fonction pour connecter un utilisateur
+// Login user
 const login = async (req, res) => {
     const { email, password } = req.body;
 
-    // Validation des champs
     if (!email || !password) {
-        return res.status(400).json({ message: "Veuillez fournir un email et un mot de passe" });
+        return res.status(400).json({ message: "Email and password are required" });
     }
 
     try {
-        // Trouve l'utilisateur par email
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(401).json({ message: "Email ou mot de passe incorrect" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        // Vérifie le mot de passe
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
-            return res.status(401).json({ message: "Email ou mot de passe incorrect" });
+            return res.status(401).json({ message: "Invalid email or password" });
         }
 
-        // Génère un token JWT avec une expiration
-        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-        // Renvoie la réponse avec le token
-        res.json({ message: "Connexion réussie", token });
+        res.json({
+            message: "Login successful",
+            token,
+            user: { id: user._id, name: user.name, email: user.email, role: user.role }
+        });
     } catch (error) {
-        console.error("Erreur lors de la connexion :", error);
-        res.status(500).json({ message: "Erreur interne du serveur" });
+        console.error("Error during login:", error);
+        res.status(500).json({ message: "Server error" });
     }
 };
 
-module.exports = { register, login }; 
+// Get authenticated user details
+const getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id).select("name email role");
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.json({ user });
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
+module.exports = { register, login, getMe };

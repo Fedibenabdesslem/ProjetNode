@@ -1,44 +1,50 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+
+// Ensure JWT_SECRET is available
 const secret = process.env.JWT_SECRET;
 
 if (!secret) {
-  console.error('JWT_SECRET is not defined in environment variables');
-  process.exit(1); // Stop the server if the secret is not found
+  throw new Error('⚠️ JWT_SECRET is not defined in environment variables. Please check your .env file.');
 }
 
-// Middleware to verify JWT token
+// ✅ Middleware to verify JWT token
 const verifyToken = (req, res, next) => {
-  const authHeader = req.header('Authorization');
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    console.error('Authorization header is missing or incorrect format');
-    return res.status(401).json({ message: 'No token, authorization denied' });
-  }
-
-  const token = authHeader.split(' ')[1];
-
   try {
+    // Get token from Authorization header (Bearer token)
+    const token = req.headers.authorization && req.headers.authorization.split(' ')[1];
+
+    if (!token) {
+      console.error('❌ No token provided.');
+      return res.status(401).json({ message: 'Authorization denied. No token provided.' });
+    }
+
+    // Verify the token
     const decoded = jwt.verify(token, secret);
-    req.user = decoded; // Attach the decoded user info to the request object
+    req.user = decoded; // Attach user data to request object
     next();
   } catch (err) {
-    let message = 'Token is not valid';
-    if (err.name === 'TokenExpiredError') {
-      message = 'Token has expired';
-    } else if (err.name === 'JsonWebTokenError') {
-      message = 'Invalid token';
-    }
-    console.error('Error verifying token:', err);
+    let message = 'Invalid token';
+    if (err.name === 'TokenExpiredError') message = 'Token has expired';
+    else if (err.name === 'JsonWebTokenError') message = 'Invalid token signature';
+
+    console.error(`❌ Token verification failed: ${message}`, err);
     return res.status(401).json({ message });
   }
 };
 
-// Middleware to check user role
-const checkRole = (role) => (req, res, next) => {
-  if (!req.user || req.user.role !== role) {
-    return res.status(403).json({ message: `Access denied. Requires ${role} role` });
+// ✅ Middleware to check user role
+const checkRole = (...allowedRoles) => (req, res, next) => {
+  if (!req.user || !req.user.role) {
+    console.error('❌ Role missing from user payload.');
+    return res.status(403).json({ message: 'Access denied. User role is missing.' });
   }
+
+  if (!allowedRoles.includes(req.user.role)) {
+    console.error(`❌ Unauthorized access: Requires role ${allowedRoles.join(' or ')}, but user has ${req.user.role}.`);
+    return res.status(403).json({ message: `Access denied. Requires role: ${allowedRoles.join(' or ')}` });
+  }
+
   next();
 };
 

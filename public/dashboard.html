@@ -131,17 +131,7 @@
 												</ul>
 											</li>
 											<li><a href="#">Doctos </a></li>
-											<li><a href="#">Services </a></li>
-											<li><a href="#">Pages <i class="icofont-rounded-down"></i></a>
-												<ul class="dropdown">
-													<li><a href="404.html">404 Error</a></li>
-												</ul>
-											</li>
-											<li><a href="#">Blogs <i class="icofont-rounded-down"></i></a>
-												<ul class="dropdown">
-													<li><a href="blog-single.html">Blog Details</a></li>
-												</ul>
-											</li>
+											
 											<li><a href="contact.html">Contact Us</a></li>
 										</ul>
 									</nav>
@@ -161,38 +151,46 @@
 		</header>
 		<!-- End Header Area -->
 
-     <!-- Breadcrumbs -->
-     <div class="breadcrumbs overlay">
-        <div class="container">
-            <div class="bread-inner">
-                <div class="row">
-                    <div class="col-12">
-                        <h2>Dashboard</h2>
-                        <ul class="bread-list">
-                            <li><a href="index.html">Home</a></li>
-                            <li><i class="icofont-simple-right"></i></li>
-                            <li class="active">Dashboard</li>
-                        </ul>
-                    </div>
+ <!-- Breadcrumbs -->
+<div class="breadcrumbs overlay">
+    <div class="container">
+        <div class="bread-inner">
+            <div class="row">
+                <div class="col-12">
+                    <h2>Dashboard</h2>
+                    <ul class="bread-list">
+                        <li><a href="index.html">Home</a></li>
+                        <li><i class="icofont-simple-right"></i></li>
+                        <li class="active">Dashboard</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End Breadcrumbs -->
+</div>
+<!-- End Breadcrumbs -->
+<!-- Start Dashboard -->
+<section class="dashboard section">
+    <div class="container">
+        <h2>Welcome, <span id="userName">User</span>!</h2>
+        <p>Email: <span id="userEmail">example@example.com</span></p>
+        <button id="logoutBtn">Logout</button>
 
-    <!-- Start Dashboard -->
-    <section class="dashboard section">
-        <div class="container">
-            <h2>Welcome, <span id="userName">User</span>!</h2>
-            <p>Email: <span id="userEmail">example@example.com</span></p>
-            <button id="logoutBtn">Logout</button>
+        <h3>Your Appointments</h3>
+        <div id="appointmentsList">
+            <p>Loading appointments...</p>
         </div>
-    </section>
-    <!-- End Dashboard -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </div>
+</section>
+<!-- End Dashboard -->
 
-    <script src="dashboard.js"></script><!-- Start Dashboard -->
-   
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="dashboard.js"></script>
+
+
+
+
+
 <!-- Footer Area -->
 <footer id="footer" class="footer ">
     <!-- Footer Top -->

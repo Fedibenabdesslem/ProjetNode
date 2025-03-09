@@ -1,12 +1,14 @@
 document.getElementById("appointmentForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
+    // Check if the user is logged in by verifying the token
     const token = localStorage.getItem("token");
     if (!token) {
         alert("No token found. Please log in first.");
         return;
     }
 
+    // Collect form data
     const appointmentData = {
         name: document.querySelector("input[name='name']").value,
         email: document.querySelector("input[name='email']").value,
@@ -17,18 +19,30 @@ document.getElementById("appointmentForm").addEventListener("submit", async func
         message: document.querySelector("textarea[name='message']").value
     };
 
+    // Basic form validation
+    if (!appointmentData.name || !appointmentData.email || !appointmentData.phone || !appointmentData.department || !appointmentData.doctor || !appointmentData.date) {
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+    // Debugging: Log the appointmentData to check if everything is correct
+    console.log("Appointment data to be sent:", appointmentData);
+
     try {
         const response = await fetch("http://localhost:5000/api/appointments", {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}` // Include the token here
+                "Authorization": `Bearer ${token}` // Include the token in headers for authentication
             },
             body: JSON.stringify(appointmentData)
         });
 
-        // Check if the response is JSON
+        // Debugging: Check the response status and content
+        console.log("Response status:", response.status);
         const contentType = response.headers.get("content-type");
+
+        // Check if the response is JSON
         if (!contentType || !contentType.includes("application/json")) {
             const text = await response.text();
             console.error("Unexpected response:", text);
@@ -39,12 +53,13 @@ document.getElementById("appointmentForm").addEventListener("submit", async func
 
         if (response.ok) {
             alert("Appointment created successfully!");
-            window.location.href = "dashboard.html"; // Redirect after creating appointment
+            window.location.href = "dashboard.html"; // Redirect to dashboard after appointment creation
         } else {
-            alert(result.message); // Show error message from the server
+            // If the server returns an error message, alert the user
+            alert(result.message || "Failed to create appointment. Please try again.");
         }
     } catch (error) {
         console.error("Appointment creation error:", error);
-        alert("Appointment creation failed!");
+        alert("Appointment creation failed! Please try again later.");
     }
 });

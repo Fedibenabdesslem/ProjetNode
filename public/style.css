@@ -4263,3 +4263,81 @@ body{
 /*=========================
 	End Footer CSS
 ===========================*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+/* Base button styling */
+.btn {
+    padding: 12px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Styling for Book Appointment Button */
+.btn-appointment {
+    background-color: #28a745; /* Green */
+    color: white;
+    border: 1px solid #28a745;
+}
+
+.btn-appointment:hover {
+    background-color: #218838; /* Darker green */
+    border-color: #218838;
+}
+
+/* Styling for Logout Button */
+.btn-logout {
+    background-color: #dc3545; /* Red */
+    color: white;
+    border: 1px solid #dc3545;
+}
+
+.btn-logout:hover {
+    background-color: #c82333; /* Darker red */
+    border-color: #c82333;
+}
+
+/* Styling for Register Button */
+.btn-register {
+    background-color: #007bff; /* Blue */
+    color: white;
+    border: 1px solid #007bff;
+}
+
+.btn-register:hover {
+    background-color: #0056b3; /* Darker blue */
+    border-color: #0056b3;
+}
+
+/* Styling for Login Button */
+.btn-login {
+    background-color: #ffc107; /* Yellow */
+    color: black;
+    border: 1px solid #ffc107;
+}
+
+.btn-login:hover {
+    background-color: #e0a800; /* Darker yellow */
+    border-color: #e0a800;
+}
