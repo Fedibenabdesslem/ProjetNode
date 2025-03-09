@@ -1,23 +1,27 @@
-// Function to check if the user is logged in
+// Fonction pour vérifier si l'utilisateur est connecté
 function checkLoginStatus() {
     const token = localStorage.getItem("token");
     const logoutBtn = document.getElementById("logoutBtn");
+    const loginRegisterBtns = document.querySelector(".get-quote"); // Conteneur des boutons Login & Register
 
     if (token) {
-        // User is logged in, show the Logout button
-        logoutBtn.style.display = "block";
+        // L'utilisateur est connecté
+        logoutBtn.style.display = "block"; // Afficher le bouton Logout
+        if (loginRegisterBtns) loginRegisterBtns.style.display = "none"; // Cacher les boutons Login & Register
     } else {
-        // User is not logged in, hide the Logout button
-        logoutBtn.style.display = "none";
+        // L'utilisateur n'est pas connecté
+        logoutBtn.style.display = "none"; // Cacher le bouton Logout
+        if (loginRegisterBtns) loginRegisterBtns.style.display = "block"; // Afficher Login & Register
     }
 }
 
-// Function to handle logout
+// Fonction pour gérer la déconnexion
 function logout() {
-    localStorage.removeItem("token");
+    localStorage.removeItem("token"); // Supprimer le token
     alert("You have been logged out.");
-    window.location.href = "index.html"; // Redirect to the home page
+    checkLoginStatus(); // Mettre à jour l'affichage des boutons
+    window.location.href = "index.html"; // Rediriger vers la page d'accueil
 }
 
-// Check login status when the page loads
+// Vérifier le statut de connexion au chargement de la page
 document.addEventListener("DOMContentLoaded", checkLoginStatus);
