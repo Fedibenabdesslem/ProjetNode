@@ -114,7 +114,7 @@ function displayAppointments(appointments) {
     appointmentsList.appendChild(table);
 }
 async function updateAppointment(appointmentId) {
-    const newStatus = prompt("Enter new status (completed, pending, etc.):");
+    const newStatus = prompt("Enter new status (completed, canceled, confirmed .):");
     const newMessage = prompt("Enter new message:");
 
     if (!newStatus || !newMessage) {

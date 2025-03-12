@@ -8,7 +8,7 @@ const appointmentSchema = new mongoose.Schema({
     doctor: { type: String, required: true },  // The doctor's name (string)
     date: { type: Date, required: true },
     message: { type: String, required: true },
-    status: { type: String, enum: ["scheduled", "completed", "canceled"], default: "scheduled" },
+    status: { type: String, enum: ["scheduled", "completed","canceled", "confirmed"], default: "scheduled" },
     client: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, // Reference to the User model
     created_at: { type: Date, default: Date.now }
 }, { timestamps: true, strictPopulate: false });

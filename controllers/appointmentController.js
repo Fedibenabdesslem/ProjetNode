@@ -91,44 +91,30 @@ const getUserAppointments = async (req, res) => {
     }
 };
 
-async function updateAppointment(appointmentId) {
-    // Prompt the user to update the status, date, or message (simplified example)
-    const newStatus = prompt("Enter new status (completed, pending, etc.):");
-    const newMessage = prompt("Enter new message:");
-
-    if (!newStatus || !newMessage) {
-        alert("Please provide both status and message.");
-        return;
-    }
-
-    const token = localStorage.getItem("token");
+const updateAppointment = async (req, res) => {
+    const { appointmentId } = req.params;  // The appointment ID from the URL
+    const { status } = req.body;  // The new status from the request body
 
     try {
-        const response = await fetch(`/api/appointments/update`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                appointmentId,
-                status: newStatus,
-                message: newMessage
-            })
-        });
-
-        const result = await response.json();
-        if (response.ok) {
-            alert("Appointment updated successfully!");
-            window.location.reload(); // Refresh the page to show updated appointments
-        } else {
-            alert(result.message || "Failed to update appointment.");
+        // Find the appointment by its ID
+        const appointment = await Appointment.findById(appointmentId);
+        if (!appointment) {
+            return res.status(404).json({ message: "Appointment not found" });
         }
+
+        // Update the appointment's status
+        appointment.status = status;
+
+        // Save the updated appointment to the database
+        await appointment.save();
+
+        // Respond with a success message
+        res.status(200).json({ message: "Appointment status updated successfully", appointment });
     } catch (error) {
-        console.error("Error updating appointment:", error);
-        alert("An error occurred while updating the appointment.");
+        console.error("Error updating appointment status:", error);
+        res.status(500).json({ message: "Server error" });
     }
-}
+};
 
 const deleteAppointment = async (req, res) => {
     const appointmentId = req.params.appointmentId; // Get appointment ID from URL params

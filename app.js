@@ -5,6 +5,7 @@ const app = express();
 const connectDB = require("./config/db");
 const authRoutes = require("./routes/authRoutes");
 const appointmentRoutes = require("./routes/appointmentRoutes");
+const adminRoutes = require("./routes/adminRoutes");
 const cors = require("cors");
 
 // Database connection
@@ -26,6 +27,8 @@ app.use(express.urlencoded({ extended: true }));
 // Register routes
 app.use("/api/auth", authRoutes);
 app.use("/api/appointments", appointmentRoutes);
+app.use("/admin", adminRoutes);
+
 
 // Serve index.html at root
 app.get("/", (req, res) => {

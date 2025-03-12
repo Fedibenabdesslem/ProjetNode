@@ -17,7 +17,11 @@ document.getElementById("loginForm").addEventListener("submit", async function (
         if (response.ok) {
             localStorage.setItem("token", result.token); // Ensure the token is saved
             alert("Login successful! Redirecting...");
-            window.location.href = "dashboard.html"; // Redirect after login
+            if (result.role === "admin") {
+                window.location.href = "dashboardAdmin.html";
+            } else {
+                window.location.href = "dashboard.html"; 
+            }
         } else {
             errorMessage.innerText = result.message;
         }
