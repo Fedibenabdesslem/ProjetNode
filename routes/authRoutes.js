@@ -2,18 +2,15 @@ const express = require("express");
 const { register, login } = require("../controllers/authController");
 const { verifyToken, checkRole } = require("../middleware/authMiddleware");
 const { getUserAppointments, getAllAppointments } = require("../controllers/appointmentController");
-const User = require("../models/User"); // ✅ Ensure User model is imported
+const User = require("../models/User");
 const Appointment = require("../models/Appointment");
 
 const router = express.Router();
 
-// ✅ Register a new user
 router.post("/register", register);
 
-// ✅ Login user
 router.post("/login", login);
 
-// ✅ Get all users (Admin only)
 router.get("/users", verifyToken, checkRole("admin"), async (req, res) => {
     try {
         const users = await User.find({}, "name email role");
@@ -24,7 +21,6 @@ router.get("/users", verifyToken, checkRole("admin"), async (req, res) => {
     }
 });
 
-// ✅ Get current logged-in user details
 router.get("/me", verifyToken, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select("name email role");
@@ -37,10 +33,8 @@ router.get("/me", verifyToken, async (req, res) => {
     }
 });
 
-// ✅ Get user-specific appointments
 router.get("/appointments/user", verifyToken, getUserAppointments);
 
-// ✅ Create an appointment (Clients Only)
 router.post("/appointments", verifyToken, checkRole("client"), async (req, res) => {
     const { name, email, phone, department, doctor, date, message } = req.body;
 
@@ -65,7 +59,6 @@ router.post("/appointments", verifyToken, checkRole("client"), async (req, res) 
     }
 });
 
-// ✅ Get all appointments (Admin Only)
 router.get("/appointments/all", verifyToken, checkRole("admin"), getAllAppointments);
 
 module.exports = router;
